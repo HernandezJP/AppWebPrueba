@@ -1,0 +1,54 @@
+﻿@model List<AppWebPrueba.Models.DepartamentoResponse>
+@{
+    ViewData["Title"] = "Departamentos";
+    bool isAdmin = User.IsInRole("Administrador");
+}
+<h3>Departamentos</h3>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nuevo</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No hay departamentos aún.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Presupuesto</th>
+                <th class="text-end" style="width:260px">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.IdDepartamento</td>
+                    <td>@item.NombreDepto</td>
+                    <td>@item.Presupuesto.ToString("Q #,##0.00")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@item.IdDepartamento">Detalles</a>
+                        <a class="btn btn-sm btn-warning text-white" asp-action="Update" asp-route-id="@item.IdDepartamento">Editar</a>
+                        @if (isAdmin)
+                        {
+                            <form asp-action="Delete" asp-route-id="@item.IdDepartamento" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('¿Eliminar?')">Eliminar</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

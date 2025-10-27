@@ -1,0 +1,69 @@
+﻿@model IEnumerable<AppWebPrueba.Models.EmpleadoResponse>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Empleados";
+    bool isAdmin = User.IsInRole("Administrador");
+}
+
+<h3>Empleados</h3>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nuevo empleado</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No hay empleados registrados.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>CUI</th>
+                <th>Fecha ingreso</th>
+                <th>Salario</th>
+                <th>Departamento</th>
+                <th class="text-end" style="width:260px">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.IdEmpleado</td>
+                    <td>@($"{e.Nombre} {e.Apellidos}")</td>
+                    <td>@e.DocumentoCui</td>
+                    <td>@e.FechaIngreso.ToString("yyyy-MM-dd")</td>
+                    <td>@($"Q {e.SalarioActual:N2}")</td>
+                    <td>@(e.NombreDepartamento ?? e.DepartamentoId.ToString())</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@e.DocumentoCui">
+                            Detalles
+                        </a>
+                        <a class="btn btn-sm btn-warning text-white" asp-action="Update" asp-route-id="@e.DocumentoCui">
+                            Editar
+                        </a>
+                        @if (isAdmin)
+                        {
+                            <form asp-action="Delete" asp-route-id="@e.DocumentoCui" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-danger" type="submit"
+                                        onclick="return confirm('¿Eliminar empleado @e.DocumentoCui?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

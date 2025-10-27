@@ -1,0 +1,52 @@
+﻿@model AppWebPrueba.Models.EmpleadoResponse
+@{
+    ViewData["Title"] = "Detalles del empleado";
+}
+
+<div class="card shadow-sm p-4">
+    <h3 class="mb-3">Detalles del empleado</h3>
+
+    <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9">@Model.IdEmpleado</dd>
+
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@Model.Nombre</dd>
+
+        <dt class="col-sm-3">Apellidos</dt>
+        <dd class="col-sm-9">@Model.Apellidos</dd>
+
+        <dt class="col-sm-3">Documento (CUI)</dt>
+        <dd class="col-sm-9">@Model.DocumentoCui</dd>
+
+        <dt class="col-sm-3">Fecha de ingreso</dt>
+        <dd class="col-sm-9">@Model.FechaIngreso.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-3">Salario actual</dt>
+        <dd class="col-sm-9">@Model.SalarioActual.ToString("C2")</dd>
+
+        <dt class="col-sm-3">Fecha último aumento</dt>
+        <dd class="col-sm-9">@Model.FechaUltimoAumento?.ToString("yyyy-MM-dd") ?? "—"</dd>
+
+        <dt class="col-sm-3">Fecha baja</dt>
+        <dd class="col-sm-9">@Model.FechaBaja?.ToString("yyyy-MM-dd") ?? "—"</dd>
+
+        <dt class="col-sm-3">Puesto</dt>
+        <dd class="col-sm-9">@Model.Puesto ?? "—"</dd>
+
+        <dt class="col-sm-3">Jerarquía</dt>
+        <dd class="col-sm-9">@Model.Jerarquia ?? "—"</dd>
+
+        <dt class="col-sm-3">Departamento</dt>
+        <dd class="col-sm-9">@Model.NombreDepartamento ?? Model.DepartamentoId.ToString()</dd>
+    </dl>
+
+    <div class="d-flex gap-2 mt-4">
+        <a asp-action="Update" asp-route-id="@Model.IdEmpleado" class="btn btn-primary">
+            Editar
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            Volver
+        </a>
+    </div>
+</div>
